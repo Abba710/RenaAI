@@ -11,7 +11,7 @@ const MyComponent = () => {
       />
 
       {/* Кнопка "Continue with Google" */}
-      <TouchableOpacity className="w-[345px] p-[15px] bg-white rounded-[10px] shadow-lg shadow-black/30 flex-row justify-start items-start gap-[15px]">
+      <TouchableOpacity className=" p-[15px] bg-white rounded-[10px] shadow-lg shadow-black/30 flex-row justify-start items-start gap-[15px]">
         {/* Иконка (заглушка) */}
         <View className="w-6 h-6">
           <Image
