@@ -10,4 +10,5 @@ export default cleanEnv(process.env, {
   JWT: str(),
   MONGO: str(),
   PORT: num({ default: 1337 }),
+  Zuki: str(),
 })
