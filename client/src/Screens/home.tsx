@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -24,34 +24,7 @@ type Message = {
   isAi: boolean;
 };
 
-const exampleMessages: Message[] = [
-  {
-    text: "Hello Rena chan, How are you today?",
-    time: new Date(),
-    isAi: false,
-  },
-  {
-    text: "Hello Sempai~! 🥰✨ I'm feeling super cute and ready to help you! 💖💡 How about you, Sempai? 😘🌸🎀",
-    time: new Date(),
-    isAi: true,
-  },
-  {
-    text: "What is the best programming language?",
-    time: new Date(),
-    isAi: false,
-  },
-  {
-    text: "Oh, Sempai~! 💖 Of course, it's JavaScript! ✨ So flexible, so fun~ 🎀 Perfect for making cute things on the web! 😘💻💕",
-    time: new Date(),
-    isAi: true,
-  },
-  { text: "Thank you Rena chan!", time: new Date(), isAi: false },
-  {
-    text: "Aww~ You're welcome, Sempai! 😘💕 Anytime for you~ ✨🎀💖",
-    time: new Date(),
-    isAi: true,
-  },
-];
+const exampleMessages: Message[] = [];
 
 const HomeScreen = () => {
   // Input settings
@@ -60,6 +33,7 @@ const HomeScreen = () => {
   const MAX_LENGTH = 250;
   const [backPressed, setBackPressed] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
+  const scrollViewRef = useRef<ScrollView | null>(null);
 
   // Send message
   const handleSend = (message: string, isAi: boolean) => {
@@ -67,6 +41,10 @@ const HomeScreen = () => {
       return; // don't send empty messages
     }
     console.log("Sent:", message);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { text: message, time: new Date(), isAi: false },
+    ]);
     setMessage("");
     setInputHeight(40);
   };
@@ -270,8 +248,12 @@ const HomeScreen = () => {
         {/* Messages - displayed if there are messages */}
         {messages.length > 0 && (
           <ScrollView
+            ref={scrollViewRef}
             className="flex-1 px-4 py-2 mb-[100px]"
             showsVerticalScrollIndicator={false}
+            onContentSizeChange={() =>
+              scrollViewRef.current?.scrollToEnd({ animated: true })
+            }
           >
             {messages.map((message, index) => (
               <View
