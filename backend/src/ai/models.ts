@@ -10,5 +10,5 @@ if (!env.Zuki) {
 // test model, only for dev
 export const zukiGPT4 = new OpenAI({
   baseURL: 'https://api.zukijourney.com/v1',
-  apiKey: env.Zuki as string,
+  apiKey: env.Zuki,
 })

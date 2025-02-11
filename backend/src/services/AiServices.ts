@@ -3,6 +3,7 @@ import { systemPrompt } from '@/ai/config/aiconfig'
 
 type AIResponse = string | undefined
 
+// The function of sending a request to AI
 export async function queryAi(text: string): Promise<AIResponse> {
   try {
     const response = await zukiGPT4.chat.completions.create({
