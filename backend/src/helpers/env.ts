@@ -9,6 +9,6 @@ dotenv.config({ path: resolve(cwd(), '.env') })
 export default cleanEnv(process.env, {
   JWT: str(),
   MONGO: str(),
-  PORT: num({ default: 1337 }),
+  PORT: num({ default: 3001 }),
   Zuki: str(),
 })

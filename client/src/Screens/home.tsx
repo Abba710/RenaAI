@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import Markdown from "react-native-markdown-display";
+import { sendMessageToAI } from "@/services/api";
 import {
   View,
   Text,
@@ -36,19 +38,47 @@ const HomeScreen = () => {
   const scrollViewRef = useRef<ScrollView | null>(null);
 
   // Send message
-  const handleSend = (message: string, isAi: boolean) => {
+  const handleSend = async (message: string, isAi: boolean) => {
+    // Check if the message is empty
     if (!message.trim()) {
-      return; // don't send empty messages
+      return; // Do not send empty messages
     }
+
     console.log("Sent:", message);
+
+    // Add user's message to the chat
     setMessages((prevMessages) => [
       ...prevMessages,
-      { text: message, time: new Date(), isAi: false },
+      { text: message, time: new Date(), isAi: false }, // User message
     ]);
+
     setMessage("");
     setInputHeight(40);
-  };
 
+    try {
+      // Attempt to get a response from the AI
+      const aiResponse = await sendMessageToAI(message);
+
+      // Add AI's response to the chat
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: aiResponse.response, time: new Date(), isAi: true }, // AI message
+      ]);
+    } catch (error) {
+      // Error handling if something goes wrong
+      console.error("Error getting AI response:", error);
+
+      // Add an error message to the chat
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          text: "Failed to get a response. Please try again.",
+          time: new Date(),
+          isAi: true,
+        }, // System message
+      ]);
+    }
+  };
   // Back button
   const handleBackPress = () => {
     if (backPressed) {
@@ -301,7 +331,7 @@ const HomeScreen = () => {
         <View className="flex-row items-center bg-white rounded-3xl px-4 py-3 shadow-xl">
           <TextInput
             className="text-gray-600 flex-1"
-            placeholder="Hello Rena chan, How are you today?"
+            placeholder="Talk with Rena chan..."
             placeholderTextColor="#666"
             value={message}
             onChangeText={(text) => {
